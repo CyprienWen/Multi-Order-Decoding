@@ -46,7 +46,7 @@ def convert(tags):
     return tags
 
 
-model_dir = './data/3_d_81.91/'
+model_dir = './data/saved_model/'
 log_file = './log.txt'
 with open(FLAGS.dir +"/ned.testa") as infile:
     gold_dev = [[w for w in sent.strip().split('\n')]for sent in infile.read().split('\n\n')]
@@ -136,6 +136,8 @@ def evaluate(sess, datahelper, model, gold, data_set):
     pred = []
     i = 0
     k = 5 #top5 order-1 tags
+    
+    # multi-order-decoding
     for x in datahelper.batch_iter(test_set, FLAGS.batch_size, False, datahelper.feat_num):
         predictions, prob = model.generate(sess, x)
         for idx_in_batch in range(FLAGS.batch_size):
